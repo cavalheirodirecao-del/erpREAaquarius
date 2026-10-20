@@ -1,0 +1,14 @@
+{
+  "name": "erp-rea-aquarius",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node --check src/server.mjs",
+    "start": "node src/server.mjs"
+  },
+  "dependencies": {
+    "@neon/config": "^1.9.2",
+    "@neon/env": "^1.6.3",
+    "@neondatabase/serverless": "^1.0.2"
+  }
+}
