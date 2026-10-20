@@ -11,6 +11,7 @@ function json(response, status, body) {
 }
 
 const server = createServer(async (request, response) => {
+  const url = new URL(request.url, `http://${request.headers.host || "localhost"}`);
   if (request.method === "GET" && request.url === "/health") {
     if (!sql) return json(response, 503, { ok: false, error: "DATABASE_URL is not configured" });
     try {
@@ -21,7 +22,21 @@ const server = createServer(async (request, response) => {
     }
   }
 
-  if (request.method === "GET" && request.url === "/") {
+  if (request.method === "GET" && url.pathname === "/api/branches") {
+    if (!sql) return json(response, 503, { error: "DATABASE_URL is not configured" });
+    try {
+      return json(response, 200, await sql.query("select id, code, name, active from branch order by name"));
+    } catch { return json(response, 503, { error: "database unavailable" }); }
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/users") {
+    if (!sql) return json(response, 503, { error: "DATABASE_URL is not configured" });
+    try {
+      return json(response, 200, await sql.query("select id, username, display_name, active from app_user order by display_name"));
+    } catch { return json(response, 503, { error: "database unavailable" }); }
+  }
+
+  if (request.method === "GET" && url.pathname === "/") {
     return json(response, 200, { service: "erp-rea-aquarius-api", status: "ready" });
   }
 
