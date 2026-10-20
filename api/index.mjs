@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 
 export default async function handler(request, response) {
-  if (request.method === "GET" && request.url === "/api/health") {
+  if (request.method === "GET") {
     if (!process.env.DATABASE_URL) {
       return response.status(503).json({ ok: false, error: "DATABASE_URL is not configured" });
     }
